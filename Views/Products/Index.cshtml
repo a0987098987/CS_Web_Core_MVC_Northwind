@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "商品";
+    var CurrentSort = ViewData["CurrentSort"] == null ? "" : ViewData["CurrentSort"].ToString();
 }
 
 <h1>商品</h1>
@@ -21,39 +22,96 @@
 <table class="table table-hover">
     <thead>
         <tr>
-            <th>
+            <th class="text-nowrap">
                 <a asp-action="Index"
                    asp-route-sortOrder="@ViewData["SortProductName"]"
                    asp-route-searchString="@ViewData["FilterCurrent"]">
                     @Html.DisplayNameFor(model => model[0].ProductName)
+                    @{
+                        if (CurrentSort == "")
+                        {
+                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-up-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M7.247 4.86l-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
+                            </svg>
+                        }
+                        if (CurrentSort == "ProductName_Desc")
+                        {
+                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-down-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
+                            </svg>
+
+                        }
+                    }
                 </a>
             </th>
-            <th>
+            <th class="text-nowrap">
                 <a asp-action="Index"
                    asp-route-sortOrder="@ViewData["SortCompanyName"]"
                    asp-route-searchString="@ViewData["FilterCurrent"]">
                     @Html.DisplayNameFor(model => model[0].Supplier.CompanyName)
+                    @{
+                        if (CurrentSort == "CompanyName")
+                        {
+                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-up-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M7.247 4.86l-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
+                            </svg>
+
+                        }
+                        if (CurrentSort == "CompanyName_Desc")
+                        {
+                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-down-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
+                            </svg>
+
+                        }
+                    }
                 </a>
             </th>
-            <th>
+            <th class="text-nowrap">
                 <a asp-action="Index"
                    asp-route-sortOrder="@ViewData["SortCategoryName"]"
                    asp-route-searchString="@ViewData["FilterCurrent"]">
                     @Html.DisplayNameFor(model => model[0].Category.CategoryName)
+                    @{
+                        if (CurrentSort == "CategoryName")
+                        {
+                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-up-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M7.247 4.86l-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
+                            </svg>
+                        }
+                        if (CurrentSort == "CategoryName_Desc")
+                        {
+                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-down-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
+                            </svg>
+
+                        }
+                    }
                 </a>
             </th>
-            <th>
+            <th class="text-nowrap">
+                @Html.DisplayNameFor(model => model[0].QuantityPerUnit)
+            </th>
+            <th class="text-nowrap">
                 <a asp-action="Index"
                    asp-route-sortOrder="@ViewData["SortUnitPrice"]"
                    asp-route-searchString="@ViewData["FilterCurrent"]">
                     @Html.DisplayNameFor(model => model[0].UnitPrice)
-                </a>
-            </th>
-            <th>
-                <a asp-action="Index"
-                   asp-route-sortOrder="@ViewData["SortUnitPrice"]"
-                   asp-route-searchString="@ViewData["FilterCurrent"]">
-                    @Html.DisplayNameFor(model => model[0].UnitPrice)
+                    @{
+                        if (CurrentSort == "UnitPrice")
+                        {
+                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-up-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M7.247 4.86l-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
+                            </svg>
+                        }
+                        if (CurrentSort == "UnitPrice_Desc")
+                        {
+                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-down-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
+                            </svg>
+
+                        }
+                    }
                 </a>
             </th>
             <th>
@@ -116,19 +174,50 @@
 @{
     var prevDisabled = !Model.HasPreviousPage ? "disabled" : ""; //上頁disabled
     var nextDisabled = !Model.HasNextPage ? "disabled" : ""; //下頁disabled
+    var active = "";
+    var pagesRange = 5;
+    var pagesStart = Model.PageIndex - pagesRange;
+    pagesStart = pagesStart < 1 ? 1 : pagesStart;
+    var pagesEnd = Model.PageIndex + pagesRange;
+    pagesEnd = pagesEnd > Model.TotalPages ? Model.TotalPages : pagesEnd;
 }
 
 <a asp-action="Index"
    asp-route-sortOrder="@ViewData["CurrentSort"]"
    asp-route-filterCurrent="@ViewData["FilterCurrent"]"
+   asp-route-pageNumber="1"
+   class="btn btn-light @prevDisabled">
+    |<<
+</a>
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-filterCurrent="@ViewData["FilterCurrent"]"
    asp-route-pageNumber="@(Model.PageIndex - 1)"
    class="btn btn-light @prevDisabled">
-    上頁
+    <
 </a>
+@for (; pagesStart <= pagesEnd; pagesStart++)
+{
+    active = (pagesStart == Model.PageIndex ? "active" : "");
+    <a asp-action="Index"
+       asp-route-sortOrder="@ViewData["CurrentSort"]"
+       asp-route-filterCurrent="@ViewData["FilterCurrent"]"
+       asp-route-pageNumber="@pagesStart"
+       class="btn btn-light @active">
+        @pagesStart
+    </a>
+}
 <a asp-action="Index"
    asp-route-sortOrder="@ViewData["CurrentSort"]"
    asp-route-filterCurrent="@ViewData["FilterCurrent"]"
    asp-route-pageNumber="@(Model.PageIndex + 1)"
    class="btn btn-light @nextDisabled">
-    下頁
+    >
+</a>
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-filterCurrent="@ViewData["FilterCurrent"]"
+   asp-route-pageNumber="@Model.TotalPages"
+   class="btn btn-light @nextDisabled">
+    >>|
 </a>

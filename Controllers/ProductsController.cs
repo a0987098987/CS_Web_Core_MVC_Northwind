@@ -38,11 +38,11 @@ namespace CS_Web_Core_MVC_Northwind.Controllers
             // 頁面上 產品 排序的值   如果等於 NULL ? 倒排序 : 正排序
             ViewData["SortProductName"] = String.IsNullOrEmpty(sortOrder) ? "ProductName_Desc" : "";
             // 頁面上 價錢 排序的值  如果等於 UnitPrice ? 倒排序 : 正排序
-            ViewData["SortUnitPrice"] = sortOrder == "UnitPrice" ? "UnitPrice_Desc" : "UnitPrice";
-            // 頁面上 價錢 排序的值  如果等於 UnitPrice ? 倒排序 : 正排序
             ViewData["SortCompanyName"] = sortOrder == "CompanyName" ? "CompanyName_Desc" : "CompanyName";
             // 頁面上 價錢 排序的值  如果等於 UnitPrice ? 倒排序 : 正排序
             ViewData["SortCategoryName"] = sortOrder == "CategoryName" ? "CategoryName_Desc" : "CategoryName";
+            // 頁面上 價錢 排序的值  如果等於 UnitPrice ? 倒排序 : 正排序
+            ViewData["SortUnitPrice"] = sortOrder == "UnitPrice" ? "UnitPrice_Desc" : "UnitPrice";
 
             // 尋找 / 排序 / 上頁、下頁，searchString 用來
             if (searchString != null)
