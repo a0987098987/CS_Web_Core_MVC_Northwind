@@ -23,22 +23,51 @@ namespace CS_Web_Core_MVC_Northwind.Controllers
         #region "index"
 
         // GET: Products
-        public async Task<IActionResult> Index(string searchString, string sortOrder)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="searchString"></param>
+        /// <param name="sortOrder"></param>
+        /// <param name="filterCurrent"></param>
+        /// <param name="pageNumber"></param>
+        /// <returns></returns>
+        public async Task<IActionResult> Index(string searchString, string sortOrder, string filterCurrent, int? pageNumber)
         {
-            // 頁面上 ProductName 排序的值     如果等於 NULL ? 倒排序 : 正排序
+            // 頁面上 目前排序的值
+            ViewData["CurrentSort"] = sortOrder;
+            // 頁面上 產品 排序的值   如果等於 NULL ? 倒排序 : 正排序
             ViewData["SortProductName"] = String.IsNullOrEmpty(sortOrder) ? "ProductName_Desc" : "";
-            // 頁面上 UnitPrice 排序的值 如果等於 UnitPrice ? 倒排序 : 正排序
+            // 頁面上 價錢 排序的值  如果等於 UnitPrice ? 倒排序 : 正排序
             ViewData["SortUnitPrice"] = sortOrder == "UnitPrice" ? "UnitPrice_Desc" : "UnitPrice";
-            // 頁面上 現在篩選
-            ViewData["searchString"] = searchString;
+            // 頁面上 價錢 排序的值  如果等於 UnitPrice ? 倒排序 : 正排序
+            ViewData["SortCompanyName"] = sortOrder == "CompanyName" ? "CompanyName_Desc" : "CompanyName";
+            // 頁面上 價錢 排序的值  如果等於 UnitPrice ? 倒排序 : 正排序
+            ViewData["SortCategoryName"] = sortOrder == "CategoryName" ? "CategoryName_Desc" : "CategoryName";
+
+            // 尋找 / 排序 / 上頁、下頁，searchString 用來
+            if (searchString != null)
+            {
+                pageNumber = 1; // 尋找、排序 用 searchString ，頁面歸1。
+            }
+            else
+            {
+                // 上頁、下頁 用 currentFilter，searchString=空白
+                searchString = filterCurrent; // 等於 filterCurrent
+            }
+            // 頁面上 目前篩選的值
+            ViewData["FilterCurrent"] = searchString;
 
             // 查詢 LINQ
             var model = from m in _context.Products
+                        .Include(s => s.Supplier)
+                        .Include(c => c.Category)
                         select m;
             // 如果 查詢文字 不是空值
             if (!String.IsNullOrEmpty(searchString))
             {
-                model = model.Where(m => m.ProductName.Contains(searchString));
+                model = model.Where(m => m.ProductName.Contains(searchString)
+                || m.Supplier.CompanyName.Contains(searchString)
+                || m.Category.CategoryName.Contains(searchString));
             }
             // LINQ 排序
             switch (sortOrder)
@@ -52,13 +81,26 @@ namespace CS_Web_Core_MVC_Northwind.Controllers
                 case "UnitPrice_Desc":
                     model = model.OrderByDescending(m => m.UnitPrice);
                     break;
+                case "CompanyName":
+                    model = model.OrderBy(m => m.Supplier.CompanyName);
+                    break;
+                case "CompanyName_Desc":
+                    model = model.OrderByDescending(m => m.Supplier.CompanyName);
+                    break;
+                case "CategoryName":
+                    model = model.OrderBy(m => m.Category.CategoryName);
+                    break;
+                case "CategoryName_Desc":
+                    model = model.OrderByDescending(m => m.Category.CategoryName);
+                    break;
                 default:
                     model = model.OrderBy(m => m.ProductName);
                     break;
             }
 
-            return View(await model.ToListAsync());
-
+            int pageSize = 5;
+            // 回傳 PaginatedList.cs 的 PaginatedList
+            return View(await PaginatedList<ProductsModel>.CreateAsync(model.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
         #endregion
@@ -92,6 +134,8 @@ namespace CS_Web_Core_MVC_Northwind.Controllers
         // GET: Products/Create
         public IActionResult Create()
         {
+            DdlSupplier();
+            DdlCategory();
             return View();
         }
 
@@ -124,11 +168,16 @@ namespace CS_Web_Core_MVC_Northwind.Controllers
                 return NotFound();
             }
 
-            var productsModel = await _context.Products.FindAsync(id);
+            var productsModel = await _context.Products
+                        .Include(s => s.Supplier)
+                        .Include(c => c.Category)
+                        .FirstOrDefaultAsync(m => m.ProductID == id);
             if (productsModel == null)
             {
                 return NotFound();
             }
+            DdlSupplier();
+            DdlCategory();
             return View(productsModel);
         }
 
@@ -199,6 +248,35 @@ namespace CS_Web_Core_MVC_Northwind.Controllers
             _context.Products.Remove(productsModel);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        #endregion
+
+
+        #region "下拉式選單"
+
+        /// <summary>
+        /// 下拉式選單 Supplier
+        /// </summary>
+        /// <param name="selected"></param>
+        private void DdlSupplier(object selected = null)
+        {
+            var query = from m in _context.Suppliers
+                        orderby m.CompanyName
+                        select m;
+            ViewBag.SupplierID = new SelectList(query.AsNoTracking(), "SupplierID", "CompanyName", selected);
+        }
+
+        /// <summary>
+        /// 下拉式選單 Category
+        /// </summary>
+        /// <param name="selected"></param>
+        private void DdlCategory(object selected = null)
+        {
+            var query = from m in _context.Categories
+                        orderby m.CategoryName
+                        select m;
+            ViewBag.CategoryID = new SelectList(query.AsNoTracking(), "CategoryID", "CategoryName", selected);
         }
 
         #endregion

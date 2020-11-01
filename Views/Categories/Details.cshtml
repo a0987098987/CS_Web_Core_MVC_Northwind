@@ -1,0 +1,36 @@
+﻿@model CS_Web_Core_MVC_Northwind.Models.CategoriesModel
+
+@{
+    ViewData["Title"] = "類別內容";
+}
+
+<h1>內容</h1>
+
+<div>
+    <h4>類別</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CategoryName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CategoryName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Picture)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Picture)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.CategoryID">編輯</a> |
+    <a asp-action="Index">返回</a>
+</div>

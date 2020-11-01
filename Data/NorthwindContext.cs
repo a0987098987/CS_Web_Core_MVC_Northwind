@@ -14,6 +14,7 @@ namespace CS_Web_Core_MVC_Northwind.Data
         {
         }
 
+        public DbSet<CategoriesModel> Categories { get; set; }
         public DbSet<ProductsModel> Products { get; set; }
         public DbSet<SuppliersModel> Suppliers { get; set; }
 

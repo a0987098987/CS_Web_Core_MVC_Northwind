@@ -1,0 +1,39 @@
+﻿@model CS_Web_Core_MVC_Northwind.Models.CategoriesModel
+
+@{
+    ViewData["Title"] = "刪除類別";
+}
+
+<h1>刪除</h1>
+
+<h3>您確定要刪除?</h3>
+<div>
+    <h4>類別</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CategoryName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CategoryName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Picture)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Picture)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="CategoryID" />
+        <input type="submit" value="刪除" class="btn btn-danger" /> |
+        <a asp-action="Index">返回</a>
+    </form>
+</div>

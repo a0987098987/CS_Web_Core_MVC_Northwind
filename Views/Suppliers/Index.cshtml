@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<CS_Web_Core_MVC_Northwind.Models.SuppliersModel>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "供應商";
 }
 
 <h1>供應商</h1>
@@ -84,7 +84,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.HomePage)
             </td>
-            <td>
+            <td class="text-nowrap">
                 <a asp-action="Edit" asp-route-id="@item.SupplierID">編輯</a> |
                 <a asp-action="Details" asp-route-id="@item.SupplierID">內容</a> |
                 <a asp-action="Delete" asp-route-id="@item.SupplierID">刪除</a>

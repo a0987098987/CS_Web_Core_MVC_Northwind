@@ -1,7 +1,7 @@
-﻿@model IEnumerable<CS_Web_Core_MVC_Northwind.Models.ProductsModel>
+﻿@model PaginatedList<CS_Web_Core_MVC_Northwind.Models.ProductsModel>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "商品";
 }
 
 <h1>商品</h1>
@@ -12,7 +12,7 @@
 <form asp-action="Index" method="get">
     <div class="form-actions no-color">
         <p>
-            尋找: <input type="text" name="SearchString" value="@ViewData["searchString"]" />
+            尋找: <input type="text" name="SearchString" value="@ViewData["FilterCurrent"]" />
             <input type="submit" value="尋找" class="btn btn-light" /> |
             <a asp-action="Index">清除</a>
         </p>
@@ -22,37 +22,51 @@
     <thead>
         <tr>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["SortProductName"]"
-                   asp-route-searchString="@ViewData["searchString"]">
-                    @Html.DisplayNameFor(model => model.ProductName)
+                <a asp-action="Index"
+                   asp-route-sortOrder="@ViewData["SortProductName"]"
+                   asp-route-searchString="@ViewData["FilterCurrent"]">
+                    @Html.DisplayNameFor(model => model[0].ProductName)
                 </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.SupplierID)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CategoryID)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.QuantityPerUnit)
-            </th>
-            <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["SortUnitPrice"]"
-                   asp-route-searchString="@ViewData["searchString"]">
-                    @Html.DisplayNameFor(model => model.UnitPrice)
+                <a asp-action="Index"
+                   asp-route-sortOrder="@ViewData["SortCompanyName"]"
+                   asp-route-searchString="@ViewData["FilterCurrent"]">
+                    @Html.DisplayNameFor(model => model[0].Supplier.CompanyName)
                 </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.UnitsInStock)
+                <a asp-action="Index"
+                   asp-route-sortOrder="@ViewData["SortCategoryName"]"
+                   asp-route-searchString="@ViewData["FilterCurrent"]">
+                    @Html.DisplayNameFor(model => model[0].Category.CategoryName)
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.UnitsOnOrder)
+                <a asp-action="Index"
+                   asp-route-sortOrder="@ViewData["SortUnitPrice"]"
+                   asp-route-searchString="@ViewData["FilterCurrent"]">
+                    @Html.DisplayNameFor(model => model[0].UnitPrice)
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ReorderLevel)
+                <a asp-action="Index"
+                   asp-route-sortOrder="@ViewData["SortUnitPrice"]"
+                   asp-route-searchString="@ViewData["FilterCurrent"]">
+                    @Html.DisplayNameFor(model => model[0].UnitPrice)
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Discontinued)
+                @Html.DisplayNameFor(model => model[0].UnitsInStock)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].UnitsOnOrder)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].ReorderLevel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].Discontinued)
             </th>
             <th></th>
         </tr>
@@ -65,10 +79,10 @@
                     @Html.DisplayFor(modelItem => item.ProductName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.SupplierID)
+                    @Html.DisplayFor(modelItem => item.Supplier.CompanyName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.CategoryID)
+                    @Html.DisplayFor(modelItem => item.Category.CategoryName)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.QuantityPerUnit)
@@ -88,7 +102,7 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Discontinued)
                 </td>
-                <td>
+                <td class="text-nowrap">
                     <a asp-action="Edit" asp-route-id="@item.ProductID">編輯</a> |
                     <a asp-action="Details" asp-route-id="@item.ProductID">內容</a> |
                     <a asp-action="Delete" asp-route-id="@item.ProductID">刪除</a>
@@ -97,3 +111,24 @@
         }
     </tbody>
 </table>
+
+@* 分頁 *@
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : ""; //上頁disabled
+    var nextDisabled = !Model.HasNextPage ? "disabled" : ""; //下頁disabled
+}
+
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-filterCurrent="@ViewData["FilterCurrent"]"
+   asp-route-pageNumber="@(Model.PageIndex - 1)"
+   class="btn btn-light @prevDisabled">
+    上頁
+</a>
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-filterCurrent="@ViewData["FilterCurrent"]"
+   asp-route-pageNumber="@(Model.PageIndex + 1)"
+   class="btn btn-light @nextDisabled">
+    下頁
+</a>

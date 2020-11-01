@@ -31,5 +31,7 @@ namespace CS_Web_Core_MVC_Northwind.Models
 
         public bool Discontinued { get; set; }
 
+        public SuppliersModel Supplier { get; set; }
+        public CategoriesModel Category { get; set; }
     }
 }
